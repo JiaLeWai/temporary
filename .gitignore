@@ -1,68 +1,88 @@
-# Xcode
-#
-# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+#import <Foundation/Foundation.h>
 
-## User settings
-xcuserdata/
+#import <objc/Object.h>
 
-## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
-*.xcscmblueprint
-*.xccheckout
+@interface Integer : NSObject {
+    int integer;
+}
 
-## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
-build/
-DerivedData/
-*.moved-aside
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
+-(int)integer;
+-(int)integer:(int) _integer;
+@end
 
-## Obj-C/Swift specific
-*.hmap
+@implementation Integer
+-(int)integer {
+    return integer;
+}
 
-## App packaging
-*.ipa
-*.dSYM.zip
-*.dSYM
+-(int)integer:(int) _integer {
+    integer = _integer;
+    return self;
+}
+@end
 
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-#
-# Pods/
-#
-# Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
+@interface Integer (Arithmetic)
+-(id) add:(Integer *) addend;
+-(id) sub:(Integer *) subtrahend;
+@end
 
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
 
-Carthage/Build/
+@implementation Integer (Arithmetic)
+-(id) add:(Integer *) addend {
+    return[self integer: [self integer]+[addend integer]];
+}
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo.
-# Instead, use fastlane to re-generate the screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
+-(id) sub:(Integer *) subtrahend {
+    return [ self integer: [self integer]-[subtrahend integer]];
+}
+@end
 
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots/**/*.png
-fastlane/test_output
+@interface Integer (Display)
+-(id) showstars;
+-(id) showint;
+@end
 
-# Code Injection
-#
-# After new code Injection tools there's a generated folder /iOSInjectionProject
-# https://github.com/johnno1962/injectionforxcode
+@implementation Integer(Display)
+-(id) showstars {
+    int i,x=[self integer];
+    for (i=0;i<x;i++) {
+        printf("*");
+    }
+    printf("\n");
+    return self;
+}
 
-iOSInjectionProject/
+-(id) showint {
+    printf("%d\n", [self integer]);
+    return self;
+}
+@end
+ 
+
+
+
+
+
+
+
+int main (int argc, const char * argv[])
+{
+    Integer * num1 = [Integer new], *num2 = [Integer new];
+    int x;
+    
+    printf("Enter an integer: ");
+    scanf("%d", &x);
+    [num1 integer:x];
+    [num1 showstars];
+    
+    printf("Enter an integer: ");
+    scanf("%d", &x);
+    [num2 integer:x];
+    [num2 showstars];
+    
+    [num1 add:num2];
+    [num1 showint];
+    return 0;
+    
+    
+}
